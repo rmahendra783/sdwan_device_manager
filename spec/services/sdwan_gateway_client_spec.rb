@@ -13,7 +13,7 @@ RSpec.describe SdwanGatewayClient do
       let(:mock_response) do
         {
           "system" => { "site_id" => 101, "system_ip" => "172.16.255.1" },
-          "interfaces" => [{ "name" => "eth0", "enabled" => true }]
+          "interfaces" => [ { "name" => "eth0", "enabled" => true } ]
         }
       end
 

@@ -8,6 +8,6 @@ class CreateSites < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :sites, [:account_id, :site_id_number], unique: true
+    add_index :sites, [ :account_id, :site_id_number ], unique: true
   end
 end

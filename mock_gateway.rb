@@ -23,8 +23,8 @@ loop do
       body = client.read(headers["content-length"].to_i)
     end
 
-    case [method, path]
-    when ["GET", "/api/v1/devices/EDGE-2432-AB/config"]
+    case [ method, path ]
+    when [ "GET", "/api/v1/devices/EDGE-2432-AB/config" ]
       puts "\n[Mock Gateway] -> GET running config for EDGE-2432-AB (matching desired)"
       response_data = {
         "system" => {
@@ -44,7 +44,7 @@ loop do
 
       client.print "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: #{response_data.bytesize}\r\nConnection: close\r\n\r\n#{response_data}"
 
-    when ["POST", "/api/v1/devices/EDGE-2432-AB/config"]
+    when [ "POST", "/api/v1/devices/EDGE-2432-AB/config" ]
       puts "\n[Mock Gateway] <- POST push config to EDGE-2432-AB: #{body}"
       response_data = { "status" => "applied", "applied_at" => Time.now.iso8601 }.to_json
 

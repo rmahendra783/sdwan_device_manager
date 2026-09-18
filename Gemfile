@@ -58,7 +58,7 @@ gem "faraday"
 
 # Fast JSON serialization
 gem "blueprinter"
-gem "json", "~> 2.10.1"
+gem "json", ">= 2.19.9"
 
 group :development, :test do
   gem "rspec-rails"

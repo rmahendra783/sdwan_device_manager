@@ -14,6 +14,6 @@ class CreateDevices < ActiveRecord::Migration[8.1]
     end
 
     add_index :devices, :serial_number, unique: true
-    add_index :devices, [:account_id, :sync_status]
+    add_index :devices, [ :account_id, :sync_status ]
   end
 end

@@ -13,6 +13,6 @@ class CreateDeviceConfigurations < ActiveRecord::Migration[8.1]
     end
 
     add_index :device_configurations, :desired_config, using: :gin
-    add_index :device_configurations, [:device_id, :version], unique: true
+    add_index :device_configurations, [ :device_id, :version ], unique: true
   end
 end

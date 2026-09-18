@@ -2,23 +2,23 @@
 module Api
   module V1
     class DevicesController < BaseController
-      before_action :set_device, only: [:show, :sync]
+      before_action :set_device, only: [ :show, :sync ]
 
       def index
         devices = Device.includes(:site, :device_configurations).all
         render json: devices.as_json(
-          only: [:id, :hostname, :serial_number, :management_ip, :device_model, :sync_status],
-          include: { site: { only: [:id, :name, :site_id_number] } }
+          only: [ :id, :hostname, :serial_number, :management_ip, :device_model, :sync_status ],
+          include: { site: { only: [ :id, :name, :site_id_number ] } }
         ), status: :ok
       end
 
       def show
         latest_config = @device.device_configurations.order(version: :desc).first
         render json: @device.as_json(
-          only: [:id, :hostname, :serial_number, :management_ip, :device_model, :sync_status]
+          only: [ :id, :hostname, :serial_number, :management_ip, :device_model, :sync_status ]
         ).merge(
           latest_configuration: latest_config&.as_json(
-            only: [:id, :version, :status, :desired_config, :running_config, :diff_payload, :applied_at]
+            only: [ :id, :version, :status, :desired_config, :running_config, :diff_payload, :applied_at ]
           )
         ), status: :ok
       end
