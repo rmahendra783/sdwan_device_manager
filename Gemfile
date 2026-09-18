@@ -50,8 +50,6 @@ group :development, :test do
 end
 
 
-# Gemfile
-
 # Background processing & in-memory data store
 gem "sidekiq"
 gem "redis"
@@ -61,6 +59,7 @@ gem "faraday"
 
 # Fast JSON serialization
 gem "blueprinter"
+gem "json", "~> 2.10.1"
 
 group :development, :test do
   gem "rspec-rails"
