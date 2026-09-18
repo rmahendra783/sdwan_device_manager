@@ -1,0 +1,11 @@
+# config/sidekiq.yml
+:concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5).to_i %>
+
+:queues:
+  # Higher number means higher polling priority
+  - [critical, 3]
+  - [device_provisioning, 2]
+  - [default, 1]
+  - [low, 1]
+
+:timeout: 25 # Seconds to allow jobs to finish gracefully during shutdown (SIGTERM)
