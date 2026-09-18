@@ -7,8 +7,11 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rspec/rails'
 require 'webmock/rspec'
+require 'sidekiq/testing'
 
-# Block external HTTP calls during specs while allowing local service connections
+# Configure Sidekiq to store jobs in memory during test runs
+Sidekiq::Testing.fake!
+
 WebMock.disable_net_connect!(allow_localhost: true)
 
 begin
@@ -23,9 +26,11 @@ RSpec.configure do |config|
   ]
 
   config.use_transactional_fixtures = true
-
-  # Automatically treats files in spec/services, spec/requests, spec/models appropriately
   config.infer_spec_type_from_file_location!
-
   config.filter_rails_from_backtrace!
+
+  # Clear background job queues between tests
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
+  end
 end
