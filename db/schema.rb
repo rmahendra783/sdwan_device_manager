@@ -22,9 +22,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_101034) do
     t.index ["slug"], name: "index_accounts_on_slug", unique: true
   end
 
-# Could not dump table "device_configurations" because of following ArgumentError
-#   wrong number of arguments (given 2, expected 1)
-
+  create_table "device_configurations", force: :cascade do |t|
+    t.datetime "applied_at"
+    t.datetime "created_at", null: false
+    t.jsonb "desired_config", default: {}, null: false
+    t.bigint "device_id", null: false
+    t.jsonb "diff_payload", default: {}
+    t.jsonb "running_config", default: {}
+    t.string "status", default: "draft"
+    t.datetime "updated_at", null: false
+    t.integer "version", default: 1, null: false
+    t.index ["desired_config"], name: "index_device_configurations_on_desired_config", using: :gin
+    t.index ["device_id", "version"], name: "index_device_configurations_on_device_id_and_version", unique: true
+    t.index ["device_id"], name: "index_device_configurations_on_device_id"
+  end
 
   create_table "devices", force: :cascade do |t|
     t.bigint "account_id", null: false
