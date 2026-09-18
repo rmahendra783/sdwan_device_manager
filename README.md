@@ -1,27 +1,30 @@
-# SD-WAN Device & Configuration Manager (API-Only)
+# SD-WAN Device & Configuration Manager (Full-Stack)
 
-A resilient Ruby on Rails backend service designed for Cisco SD-WAN device orchestration, automated configuration drift detection (Diff Engine), and idempotent mass-deployment via asynchronous workers.
+A resilient full-stack SD-WAN orchestration platform featuring a Rails 8 API backend, Sidekiq background workers, PostgreSQL JSONB storage, and a real-time React/Tailwind frontend dashboard for automated configuration drift detection and zero-touch edge reconciliation.
 
 ## Tech Stack
-- **Ruby on Rails** (API-only mode)
-- **PostgreSQL** (JSONB config storage, GIN indexes, multi-tenant relational schema)
-- **Redis & Sidekiq** (Asynchronous deployment pipelines with rate limiting and idempotency)
-- **Faraday** (Resilient external API client with timeouts and retries)
-- **RSpec & WebMock** (TDD for config diff computation and API error states)
+- **Backend:** Ruby on Rails 8 (API-only mode)
+- **Frontend:** React 18, Vite, Tailwind CSS, Lucide Icons, Axios
+- **Database:** PostgreSQL (JSONB config storage, GIN indexes)
+- **Queuing & Concurrency:** Redis & Sidekiq 8 (Dedicated queues, 409 Conflict concurrency lock)
+- **Hardware Simulation:** Custom Ruby TCP Mock SD-WAN Gateway (`mock_gateway.rb`)
 
-## Architecture Overview
-1. **REST Interface:** Accepts configuration intents and returns `202 Accepted`.
-2. **Orchestrator:** Slices bulk rollouts into isolated, concurrent device tasks.
-3. **Diff Engine (`ConfigDiffService`):** Recursively compares desired JSON/YANG definitions against live running configurations to detect configuration drift.
-4. **Mock SD-WAN Client:** Simulates Cisco SD-WAN Manager API responses, handling network timeouts, 401 token refreshes, and backoff retries.
+## Key Architecture & Features
+1. **Idempotent Reconciliation:** Enqueues async tasks returning `202 Accepted` to prevent web thread exhaustion.
+2. **Concurrency Locking:** 409 Conflict guard prevents parallel sync executions per edge device.
+3. **Algorithmic Diff Engine:** Recursively evaluates Desired Template Blueprints against live router running configs to flag `missing`, `modified`, and `unexpected` keys.
+4. **Interactive Dashboard:** Live telemetry KPI cards, automated short-polling during pending syncs, and a slide-over modal for JSONB drift inspection.
 
-## Setup & Running Locally
+## Quickstart & Local Setup
+
+### 1. Backend Setup
 ```bash
 # Install dependencies
 bundle install
 
-# Database setup & seeding demo SD-WAN topologies
-rails db:create db:migrate db:seed
+# Database setup & seeding demo edge routers
+bin/rails db:create db:migrate db:seed
+
 
 # Run the test suite
 bundle exec rspec
